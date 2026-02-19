@@ -10,10 +10,10 @@ export class User {
     @Column({ nullable: false, unique: true })
     username: string;
 
-    @Column({ nullable: false })
+    @Column({default: ""})
     firstname: string;
 
-    @Column({ nullable: false })
+    @Column({default: ""})
     lastname: string;
 
     @Column({ nullable: false, unique: true })
