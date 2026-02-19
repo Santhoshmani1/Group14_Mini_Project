@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Search, Menu, X, GraduationCap } from "lucide-react";
 
 interface NavbarProps {
@@ -8,6 +9,8 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   const [searchFocused, setSearchFocused] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
+  const location = useLocation();
+  const isAllCoursesPage = location.pathname.startsWith("/courses/");
 
   return (
     <nav className="sticky top-0 z-30 w-full bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
@@ -36,14 +39,15 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
         </div>
 
         {/* ================= CENTER (SEARCH) ================= */}
-        <div className="flex-1 max-w-xl mx-4">
-          <div
-            className={`flex items-center gap-2 px-4 py-2 rounded-2xl border transition-all duration-200 ${
-              searchFocused
-                ? "border-violet-400 bg-white shadow-md shadow-violet-100 ring-2 ring-violet-100"
-                : "border-slate-200 bg-slate-50 hover:border-slate-300"
-            }`}
-          >
+        {!isAllCoursesPage && (
+          <div className="flex-1 max-w-xl mx-4">
+            <div
+              className={`flex items-center gap-2 px-4 py-2 rounded-2xl border transition-all duration-200 ${
+                searchFocused
+                  ? "border-violet-400 bg-white shadow-md shadow-violet-100 ring-2 ring-violet-100"
+                  : "border-slate-200 bg-slate-50 hover:border-slate-300"
+              }`}
+            >
             <Search
               size={16}
               className={`transition-colors ${
@@ -69,8 +73,9 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
                 <X size={14} />
               </button>
             )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ================= RIGHT SIDE ================= */}
         <div className="flex items-center gap-2 flex-shrink-0">

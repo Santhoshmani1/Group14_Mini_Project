@@ -1,4 +1,5 @@
 import { Star, Clock, Users, Play, BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import type { Course } from "../data/courses";
 
 interface CourseCardGridProps {
@@ -24,8 +25,12 @@ const formatEnrollments = (n: number): string => {
 };
 
 export default function CourseCardGrid({ course, showProgress = false }: CourseCardGridProps) {
+  const navigate = useNavigate();
+
   return (
-    <div className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+    <div 
+      onClick={() => navigate(`/course/${course.id}`)}
+      className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
       {/* Thumbnail */}
       <div className="relative overflow-hidden h-44">
         <img

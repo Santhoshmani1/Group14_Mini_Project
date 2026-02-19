@@ -58,7 +58,7 @@ const HomePage: React.FC = () => {
         <CourseSection
           title="Recommended for You"
           subtitle="Curated based on your interests and learning history"
-          courses={recommendedCourses}
+          courses={recommendedCourses.slice(0, 6)}
           accentColor="violet"
           viewAllPath="/courses/recommended"
         />
@@ -66,7 +66,7 @@ const HomePage: React.FC = () => {
         <CourseSection
           title="Continue Learning"
           subtitle="Pick up where you left off"
-          courses={enrolledCourses}
+          courses={enrolledCourses.slice(0, 6)}
           showProgress={true}
           accentColor="indigo"
           viewAllPath="/courses/enrolled"
@@ -75,7 +75,7 @@ const HomePage: React.FC = () => {
         <CourseSection
           title="Explore New Topics"
           subtitle="Discover something outside your comfort zone"
-          courses={exploreCourses}
+          courses={exploreCourses.slice(0, 6)}
           accentColor="emerald"
           viewAllPath="/courses/explore"
         />
@@ -83,7 +83,7 @@ const HomePage: React.FC = () => {
         <CourseSection
           title="Trending Right Now"
           subtitle="What thousands of learners are signing up for this week"
-          courses={trendingCourses}
+          courses={trendingCourses.slice(0, 6)}
           accentColor="rose"
           viewAllPath="/courses/trending"
         />

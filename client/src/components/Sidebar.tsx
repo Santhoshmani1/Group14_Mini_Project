@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  isLoggedIn?: boolean;
 }
 
 interface SectionLink {
@@ -50,7 +51,7 @@ const sections: SectionLink[] = [
   },
 ];
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isLoggedIn = false }) => {
   const navigate = useNavigate();
 
   const handleNavigate = (path: string): void => {
@@ -132,18 +133,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="px-5 py-4 border-t border-slate-100">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
-              A
-            </div>
-            <div>
-              <p className="text-sm font-bold text-slate-800">Alex Johnson</p>
-              <p className="text-xs text-slate-400">alex@example.com</p>
+        {/* Footer - Only show if user is logged in */}
+        {isLoggedIn && (
+          <div className="px-5 py-4 border-t border-slate-100">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
+                A
+              </div>
+              <div>
+                <p className="text-sm font-bold text-slate-800">Alex Johnson</p>
+                <p className="text-xs text-slate-400">alex@example.com</p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </aside>
     </>
   );

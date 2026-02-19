@@ -259,29 +259,35 @@ const AllCoursesPage: React.FC = () => {
             Back to Home
           </button>
 
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
-              {config.icon}
+          {/* Banner content - flex row to align title/subtitle left and search right */}
+          <div className="flex items-center justify-between gap-8">
+            {/* Left side - Title and Subtitle */}
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+                  {config.icon}
+                </div>
+                <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">{config.title}</h1>
+              </div>
+              <p className="text-white/70 text-sm ml-[52px]">{config.subtitle}</p>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">{config.title}</h1>
-          </div>
-          <p className="text-white/70 text-sm ml-[52px] mb-6">{config.subtitle}</p>
 
-          {/* Search bar */}
-          <div className="relative max-w-xl">
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={`Search in ${config.title}...`}
-              className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/95 backdrop-blur-sm text-slate-800 text-sm placeholder-slate-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
-            />
-            {search && (
-              <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                <X size={15} />
-              </button>
-            )}
+            {/* Right side - Search bar */}
+            <div className="relative max-w-md flex-shrink-0">
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={`Search in ${config.title}...`}
+                className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/95 backdrop-blur-sm text-slate-800 text-sm placeholder-slate-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
+              />
+              {search && (
+                <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                  <X size={15} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

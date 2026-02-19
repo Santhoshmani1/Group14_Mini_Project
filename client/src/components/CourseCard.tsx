@@ -1,4 +1,5 @@
 import { Star, Clock, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import type { Course } from "../data/courses";
 
 interface CourseCardProps {
@@ -24,8 +25,13 @@ const formatEnrollments = (n: number): string => {
 };
 
 export default function CourseCard({ course, showProgress = false }: CourseCardProps) {
+  const navigate = useNavigate();
+
   return (
-    <div className="group relative flex flex-col w-72 flex-shrink-0 rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+    <div
+      onClick={() => navigate(`/course/${course.id}`)}
+      className="group relative flex flex-col w-72 flex-shrink-0 rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+    >
       {/* Thumbnail */}
       <div className="relative overflow-hidden h-40">
         <img
