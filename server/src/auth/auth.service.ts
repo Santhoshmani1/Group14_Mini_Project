@@ -13,7 +13,7 @@ export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async register(dto: RegisterDto) {
     const existingUser = await this.usersService.findByEmail(dto.email);
@@ -37,7 +37,15 @@ export class AuthService {
 
     return {
       message: 'User registered successfully',
-      access_token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(payload),
+      user: {
+        id: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
+        role: newUser.role,
+      }
     };
   }
 
@@ -61,7 +69,15 @@ export class AuthService {
     };
 
     return {
-      access_token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        role: user.role,
+      }
     };
   }
 
