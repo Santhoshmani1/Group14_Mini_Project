@@ -20,7 +20,8 @@ export class ProfileService {
     }
 
     // Return user profile without password
-    const { password, ...profileWithoutPassword } = user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...profileWithoutPassword } = user;
     return profileWithoutPassword;
   }
 
@@ -41,7 +42,10 @@ export class ProfileService {
     }
 
     // Check if username is already taken by another user
-    if (updateProfileDto.username && updateProfileDto.username !== user.username) {
+    if (
+      updateProfileDto.username &&
+      updateProfileDto.username !== user.username
+    ) {
       const allUsers = await this.userService.findAll();
       const userExists = allUsers.find(
         (u) => u.username === updateProfileDto.username && u.id !== userId,
@@ -52,13 +56,14 @@ export class ProfileService {
     }
 
     const updatedUser = await this.userService.update(userId, updateProfileDto);
-    
+
     if (!updatedUser) {
       throw new NotFoundException('User not found');
     }
 
     // Return updated profile without password
-    const { password, ...profileWithoutPassword } = updatedUser;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...profileWithoutPassword } = updatedUser;
     return profileWithoutPassword;
   }
 

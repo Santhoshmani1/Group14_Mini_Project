@@ -17,7 +17,7 @@ import { SimpleAuthGuard } from 'src/auth/simple-auth.guard';
 @Controller('user/profile')
 @UseGuards(SimpleAuthGuard)
 export class ProfileController {
-  constructor(private readonly profileService: ProfileService) { }
+  constructor(private readonly profileService: ProfileService) {}
 
   @Get(':id')
   async getProfile(@Param('id') id: string) {
