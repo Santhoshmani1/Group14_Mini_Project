@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsEnum,
 } from 'class-validator';
-import { ROLES } from 'src/user/roles';
+import { ROLES } from '../../user/roles';
 
 export class RegisterDto {
   @IsString()

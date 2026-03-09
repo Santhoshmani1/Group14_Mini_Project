@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { ROLES } from './roles';
 
 @Injectable()
 export class UserService {
@@ -37,5 +38,20 @@ export class UserService {
 
   async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOneBy({ email });
+  }
+
+  async findByRole(role: ROLES): Promise<User[]> {
+    return this.userRepository.find({ where: { role } });
+  }
+
+  async searchUsers(query: string): Promise<User[]> {
+    return this.userRepository.find({
+      where: [
+        { username: Like(`%${query}%`) },
+        { email: Like(`%${query}%`) },
+        { firstname: Like(`%${query}%`) },
+        { lastname: Like(`%${query}%`) },
+      ],
+    });
   }
 }

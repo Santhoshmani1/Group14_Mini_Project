@@ -1,7 +1,13 @@
-import { IsOptional, IsString, IsEmail, IsEnum } from 'class-validator';
-import { ROLES } from 'src/user/roles';
+import {
+  IsOptional,
+  IsString,
+  IsEmail,
+  IsEnum,
+  IsBoolean,
+} from 'class-validator';
+import { ROLES } from '../../user/roles';
 
-export class UpdateProfileDto {
+export class UpdateUserAdminDto {
   @IsOptional()
   @IsString()
   firstname?: string;
@@ -16,6 +22,10 @@ export class UpdateProfileDto {
 
   @IsOptional()
   @IsString()
+  username?: string;
+
+  @IsOptional()
+  @IsString()
   current_organisation?: string;
 
   @IsOptional()
@@ -23,10 +33,10 @@ export class UpdateProfileDto {
   bio?: string;
 
   @IsOptional()
-  @IsString()
-  username?: string;
-
-  @IsOptional()
   @IsEnum(ROLES)
   role?: ROLES;
+
+  @IsOptional()
+  @IsBoolean()
+  is_active?: boolean;
 }
