@@ -9,6 +9,7 @@ import { SectionModule } from './section/section.module';
 import { QuizModule } from './quiz/quiz.module';
 import { ContentTypeModule } from './content-type/content-type.module';
 import { ProgressModule } from './progress/progress.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ProgressModule } from './progress/progress.module';
     ContentTypeModule,
     ProgressModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    AdminModule,
   ],
   // controllers: [AppController],
   // providers: [AppService],

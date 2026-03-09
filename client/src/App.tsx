@@ -10,13 +10,25 @@ import AllCoursesPage from "./pages/AllCoursesPage";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import ProfilePage from "./pages/ProfilePage";
 
-function App() {
+import AdminProtectedRoutes from "./routes/AdminProtectedRoutes";
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminInstructors from "./pages/admin/AdminInstructors";
+import AdminCourses from "./pages/admin/AdminCourses";
+
+import { useLocation } from "react-router-dom";
+
+function AppContent() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [isLoggedIn] = useState<boolean>(false); // Change to true after login
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
-    <BrowserRouter>
-      <Navbar onMenuClick={() => setSidebarOpen(true)} />
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isLoggedIn={isLoggedIn} />
+    <>
+      {!isAdminRoute && <Navbar onMenuClick={() => setSidebarOpen(true)} />}
+      {!isAdminRoute && <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isLoggedIn={isLoggedIn} />}
 
       <main>
         <Routes>
@@ -31,11 +43,28 @@ function App() {
           <Route path="/courses/:section" element={<AllCoursesPage />} />
           <Route path="/course/:id" element={<CourseDetailPage />} />
 
+          <Route path="/admin" element={<AdminProtectedRoutes />}>
+            <Route element={<AdminLayout />}>
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="instructors" element={<AdminInstructors />} />
+              <Route path="courses" element={<AdminCourses />} />
+            </Route>
+          </Route>
+
           <Route path="*" element={<UserLogin />} />
         </Routes>
       </main>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
-};
+}
 
 export default App;

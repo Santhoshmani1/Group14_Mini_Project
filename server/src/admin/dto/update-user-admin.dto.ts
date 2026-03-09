@@ -1,39 +1,42 @@
 import {
-  IsEmail,
-  IsString,
-  MinLength,
   IsOptional,
+  IsString,
+  IsEmail,
   IsEnum,
+  IsBoolean,
 } from 'class-validator';
 import { ROLES } from '../../user/roles';
 
-export class RegisterDto {
-  @IsString()
+export class UpdateUserAdminDto {
   @IsOptional()
-  username: string;
-
   @IsString()
-  @IsOptional()
-  firstname: string;
+  firstname?: string;
 
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  lastname: string;
+  lastname?: string;
 
+  @IsOptional()
   @IsEmail()
-  email: string;
-
-  @IsString()
-  @MinLength(6)
-  password: string;
+  email?: string;
 
   @IsOptional()
+  @IsString()
+  username?: string;
+
+  @IsOptional()
+  @IsString()
   current_organisation?: string;
 
   @IsOptional()
+  @IsString()
   bio?: string;
 
   @IsOptional()
   @IsEnum(ROLES)
   role?: ROLES;
+
+  @IsOptional()
+  @IsBoolean()
+  is_active?: boolean;
 }

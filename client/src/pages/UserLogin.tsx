@@ -35,10 +35,16 @@ const UserLogin: React.FC = () => {
       }
 
       localStorage.setItem("token", token)
-      if (res.data?.user) localStorage.setItem("user", JSON.stringify(res.data.user))
+      const user = res.data?.user;
+      if (user) localStorage.setItem("user", JSON.stringify(user))
 
       setLoading(false)
-      navigate("/")
+      
+      if (user?.role === 'ADMIN' || user?.role === 2) {
+        navigate("/admin/dashboard")
+      } else {
+        navigate("/")
+      }
     } catch (err: any) {
       setLoading(false)
       setError(err?.response?.data?.message || "Login failed")
