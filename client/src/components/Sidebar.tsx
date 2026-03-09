@@ -14,17 +14,10 @@ interface SectionLink {
   accent: string;
   iconBg: string;
   path: string;
+
 }
 
 const sections: SectionLink[] = [
-  {
-    label: "Recommended for You",
-    subtitle: "Curated picks based on your interests",
-    icon: <Star size={18} />,
-    accent: "text-violet-600",
-    iconBg: "bg-violet-100",
-    path: "/courses/recommended",
-  },
   {
     label: "Continue Learning",
     subtitle: "Pick up where you left off",
@@ -32,6 +25,8 @@ const sections: SectionLink[] = [
     accent: "text-indigo-600",
     iconBg: "bg-indigo-100",
     path: "/courses/enrolled",
+  
+
   },
   {
     label: "Explore New Topics",

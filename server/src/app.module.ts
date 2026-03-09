@@ -9,6 +9,8 @@ import { SectionModule } from './section/section.module';
 import { QuizModule } from './quiz/quiz.module';
 import { ContentTypeModule } from './content-type/content-type.module';
 import { ProgressModule } from './progress/progress.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { ProgressModule } from './progress/progress.module';
     ProgressModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
