@@ -42,7 +42,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
         </div>
 
         {/* ================= CENTER (SEARCH) ================= */}
-        {!isAllCoursesPage && (
+        {isAllCoursesPage && (
           <div className="flex-1 max-w-xl mx-4">
             <div
               className={`flex items-center gap-2 px-4 py-2 rounded-2xl border transition-all duration-200 ${searchFocused
