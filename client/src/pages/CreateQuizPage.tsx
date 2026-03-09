@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { createQuiz } from "../api/QuizApi";
 import type { Question } from "../types/quiz";
@@ -168,4 +169,3 @@ const CreateQuiz: React.FC = () => {
 };
  
 export default CreateQuiz;
- 

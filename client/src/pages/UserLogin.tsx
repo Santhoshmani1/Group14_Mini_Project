@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom"
 import api from "../api/axios"
 import mainImg from "../assets/main-img.jpg"
 
-const UserLogin: React.FC = () => {
+interface UserLoginProps {
+  onLogin?: () => void;
+}
+
+const UserLogin: React.FC<UserLoginProps> = ({ onLogin }) => {
   const navigate = useNavigate()
 
   const [form, setForm] = useState({ email: "", password: "" })
@@ -34,7 +38,8 @@ const UserLogin: React.FC = () => {
         return
       }
 
-      localStorage.setItem("token", token)
+  localStorage.setItem("token", token)
+  onLogin && onLogin()
       if (res.data?.user) localStorage.setItem("user", JSON.stringify(res.data.user))
 
       setLoading(false)
