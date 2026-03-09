@@ -24,4 +24,8 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsString()
   username?: string;
+
+  @IsOptional()
+  @IsString()
+  role: number;
 }
