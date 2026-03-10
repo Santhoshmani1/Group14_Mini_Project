@@ -25,7 +25,7 @@ export class EnrollmentController {
   constructor(private readonly enrollmentService: EnrollmentService) {}
 
   @Post()
-  @Roles(ROLES.STUDENT)
+  @Roles(ROLES.STUDENT, ROLES.INSTRUCTOR)
   create(
     @Body() createEnrollmentDto: CreateEnrollmentDto,
     @GetUser('sub') userId: string,
@@ -50,14 +50,11 @@ export class EnrollmentController {
     if (courseId) {
       return this.enrollmentService.findByCourseId(+courseId);
     }
-    if (role === ROLES.INSTRUCTOR) {
-      return this.enrollmentService.findAll();
-    }
     return this.enrollmentService.findByUserId(currentUserId!);
   }
 
   @Get('check/:courseId')
-  @Roles(ROLES.STUDENT)
+  @Roles(ROLES.STUDENT, ROLES.INSTRUCTOR)
   checkEnrollment(
     @Param('courseId', ParseIntPipe) courseId: number,
     @GetUser('sub') userId: string,
