@@ -93,7 +93,7 @@ const HomePage: React.FC = () => {
  
         // Fetch user data (optional, but good for Welcome banner)
         if (enrollmentsData.length > 0 && enrollmentsData[0].user) {
-            setUserName(enrollmentsData[0].user.name || enrollmentsData[0].user.email);
+            setUserName(enrollmentsData[0].user.username || enrollmentsData[0].user.email);
         }
  
         // Fetch all published courses to populate other sections
