@@ -131,7 +131,13 @@ const InstructorPage = () => {
       <h2 className="text-2xl font-semibold mt-14 mb-4">Your Courses</h2>
 
       {loading && <p className="text-gray-500">Loading courses...</p>}
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+      {error && (
+        <p className="text-red-500 mb-4">
+          {error}
+          {error.includes('permissions') &&
+            " – you may need to click 'Become Instructor' in the sidebar or log out/in again."}
+        </p>
+      )}
 
       {!loading && !error && courses.length === 0 && (
         <div className="text-left text-gray-500 mb-8">

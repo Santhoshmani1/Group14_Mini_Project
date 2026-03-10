@@ -112,7 +112,8 @@ const CreateCoursePage = () => {
       setSuccess('Course created successfully!');
       setTimeout(() => navigate('/instructor'), 1500);
     } catch (err: any) {
-      setError(err?.response?.data?.message || 'Failed to create course');
+      const msg = err?.response?.data?.message || 'Failed to create course';
+      setError(msg + (msg.includes('permissions') ? ' (make sure you are an instructor and your token is fresh)' : ''));
     } finally {
       setLoading(false);
     }

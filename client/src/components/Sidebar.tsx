@@ -121,9 +121,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isLoggedIn = false }
     try {
       const response = await api.patch(`/users/${user.id}`, { role: 'INSTRUCTOR' });
       console.log("Update response:", response.data);
-      const updatedUser = { ...user, role: 'INSTRUCTOR' };
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      setUser(updatedUser);
+
+      // role changed on server; token still has old role so fetch a new one
+      try {
+        const refreshRes = await api.get('/auth/refresh');
+        const { token: newToken, user: newUser } = refreshRes.data;
+        localStorage.setItem('token', newToken);
+        localStorage.setItem('user', JSON.stringify(newUser));
+        setUser(newUser as any);
+      } catch (refreshErr) {
+        console.warn('Failed to refresh token after role update, you may need to log in again', refreshErr);
+      }
+
       alert("Congratulations! You are now an instructor.");
       navigate("/instructor");
       onClose();

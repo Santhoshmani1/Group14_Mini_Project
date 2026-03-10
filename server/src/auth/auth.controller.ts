@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { SimpleAuthGuard } from './simple-auth.guard';
@@ -18,6 +18,18 @@ export class AuthController {
   @Post('login')
   login(@Body() dto: RegisterDto) {
     return this.authService.login(dto);
+  }
+
+  /**
+   * Request a fresh JWT representing the current state of the user.
+   * The incoming token is validated by the guard, but the returned
+   * value is re-signed after looking up the user in the database.
+   */
+  @Get('refresh')
+  @UseGuards(SimpleAuthGuard)
+  async refreshToken(@Request() req: { user: { sub: string } }) {
+    // req.user set by SimpleAuthGuard
+    return this.authService.refreshToken(req.user.sub);
   }
 
   @UseGuards(SimpleAuthGuard)

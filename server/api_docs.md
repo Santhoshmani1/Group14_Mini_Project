@@ -83,6 +83,19 @@ Authenticate and receive JWT token.
 }
 ```
 
+### Refresh Token
+**GET** `/auth/refresh`
+
+Obtain a fresh JWT reflecting the current role/status of the authenticated user. The request must include the existing bearer token; the new token will be signed after looking up the user in the database (useful after role promotions).
+
+**Response:** `200 OK`
+```json
+{
+  "token": "<new_jwt>",
+  "user": { /* same shape as login response */ }
+}
+```
+
 ---
 
 ## Course Endpoints
