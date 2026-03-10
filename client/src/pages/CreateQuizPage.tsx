@@ -12,7 +12,7 @@ interface CourseOption {
   sections: { id: number; title: string }[];
 }
 
-const QuizPage: React.FC = () => {
+const CreateQuizPage: React.FC = () => {
   const navigate = useNavigate();
   const { id: quizId } = useParams<{ id: string }>();
   const isEditMode = !!quizId;
@@ -26,10 +26,13 @@ const QuizPage: React.FC = () => {
   // â”€â”€ Form state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [sectionId, setSectionId] = useState<number | "">("");
   const [duration, setDuration] = useState(1800);
   const [passingScore, setPassingScore] = useState(70);
+
+  // Current question being built
   const [questionText, setQuestionText] = useState("");
-  const [options, setOptions] = useState(["", "", ""]);
+  const [options, setOptions] = useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState(0);
   const [quiz, setQuiz] = useState<Question[]>([]);
   const [loading, setLoading] = useState(false);
@@ -96,7 +99,7 @@ const QuizPage: React.FC = () => {
       { id: quiz.length + 1, question: questionText, options, correctAnswer },
     ]);
     setQuestionText("");
-    setOptions(["", "", ""]);
+    setOptions(["", "", "", ""]);
     setCorrectAnswer(0);
   };
 
@@ -294,4 +297,4 @@ const QuizPage: React.FC = () => {
   );
 };
 
-export default QuizPage;
+export default CreateQuizPage;

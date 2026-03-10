@@ -11,6 +11,7 @@ import { ContentTypeModule } from './content-type/content-type.module';
 import { ProgressModule } from './progress/progress.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AppService } from './app.service';
     ContentTypeModule,
     ProgressModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

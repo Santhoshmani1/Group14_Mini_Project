@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
@@ -102,5 +102,36 @@ export class AuthService {
   // TODO: This should probably be removed or should be restricted to admin users only
   async getUsers() {
     return this.usersService.findAll();
+  }
+
+  /**
+   * @name refreshToken
+   * @summary Generate a fresh JWT for the given user ID by re-reading
+   * the user's current role (useful after their permissions change).
+   * The controller will typically call this when a role update occurs.
+   */
+  async refreshToken(userId: string) {
+    const user = await this.usersService.findOne(userId);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    return {
+      token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        role: user.role,
+      },
+    };
   }
 }
