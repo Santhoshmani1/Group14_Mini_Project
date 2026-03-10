@@ -52,11 +52,10 @@ const mapCourse = (backendCourse: any): Course => {
   return {
     id: String(backendCourse.id),
     title: backendCourse.title,
-    instructor: backendCourse.instructor?.name || "Unknown Instructor",
+    instructor: backendCourse.instructor?.username || "Unknown Instructor",
     instructor_bio: backendCourse.instructor?.bio,
     instructor_avatar: backendCourse.instructor?.avatar,
     thumbnail_url: backendCourse.thumbnailUrl || "https://picsum.photos/seed/default/800/450",
-    price: parseFloat(backendCourse.price),
     average_rating: 4.5, // Mocked for now
     total_enrollments: backendCourse.enrollments?.length || 0,
     level: backendCourse.level || "BEGINNER",
@@ -143,7 +142,13 @@ export default function CourseDetailPage() {
  
   const handleEnroll = async () => {
     if (!id || !course) return;
- 
+
+    // Guest: redirect to login
+    if (!localStorage.getItem("token")) {
+      navigate("/userLogin");
+      return;
+    }
+
     if (isEnrolled) {
        navigate("/courses/enrolled");
        return;
@@ -282,23 +287,13 @@ export default function CourseDetailPage() {
                   className="w-full h-44 object-cover"
                 />
                 <div className="p-6 flex flex-col gap-4">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-black text-slate-800">
-                      {course.price === 0 ? "Free" : `₹${course.price}`}
-                    </span>
-                    {course.price > 0 && !isEnrolled && (
-                      <span className="text-sm text-slate-400 line-through">
-                        ₹{Math.round(course.price * 1.6)}
-                      </span>
-                    )}
-                  </div>
                   <button
                     onClick={handleEnroll}
                     disabled={enrollmentLoading}
                     className="w-full py-3.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-violet-200 hover:shadow-violet-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {!isEnrolled && <ShoppingCart size={18} />}
-                    {enrollmentLoading ? "Processing..." : isEnrolled ? "Go to Course" : (course.price === 0 ? "Enroll for Free" : "Enroll")}
+                    {enrollmentLoading ? "Processing..." : isEnrolled ? "Go to Course" : "Enroll"}
                   </button>
                  
                   {!isEnrolled && (
@@ -307,8 +302,6 @@ export default function CourseDetailPage() {
                       Add to Wishlist
                     </button>
                   )}
-                  {!isEnrolled && <p className="text-center text-xs text-slate-400">30-Day Money-Back Guarantee</p>}
-                 
                   <div className="border-t border-slate-100 pt-4 flex flex-col gap-2 text-xs text-slate-500">
                     <span className="flex items-center gap-2"><BookOpen size={13} /> {totalLessons} lessons</span>
                     <span className="flex items-center gap-2"><Clock size={13} /> {formatDuration(course.estimated_duration_minutes)} total</span>
@@ -478,31 +471,20 @@ export default function CourseDetailPage() {
               className="w-full h-44 object-cover"
             />
             <div className="p-6 flex flex-col gap-4">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-slate-800">
-                  {course.price === 0 ? "Free" : `₹${course.price}`}
-                </span>
-                {course.price > 0 && !isEnrolled && (
-                  <span className="text-sm text-slate-400 line-through">
-                    ₹{Math.round(course.price * 1.6)}
-                  </span>
-                )}
-              </div>
               <button
                 onClick={handleEnroll}
                 disabled={enrollmentLoading}
                 className="w-full py-3.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-violet-200 disabled:opacity-70 disabled:cursor-not-allowed">
                 {!isEnrolled && <ShoppingCart size={18} />}
-                {enrollmentLoading ? "Processing..." : isEnrolled ? "Go to Course" : (course.price === 0 ? "Enroll for Free" : "Enroll")}
+                {enrollmentLoading ? "Processing..." : isEnrolled ? "Go to Course" : "Enroll"}
               </button>
- 
+
               {!isEnrolled && (
                 <button className="w-full py-3 border-2 border-slate-200 text-slate-700 font-semibold rounded-2xl flex items-center justify-center gap-2">
                   <Zap size={16} />
                   Add to Wishlist
                 </button>
               )}
-              {!isEnrolled && <p className="text-center text-xs text-slate-400">30-Day Money-Back Guarantee</p>}
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import { Search, Sparkles, X } from "lucide-react";
 import CourseSection from "../components/CourseSection";
 import React, { useState, useEffect } from "react";
 import api from "../api/axios";
@@ -32,7 +32,7 @@ const mapCourse = (backendCourse: any): Course => {
 };
  
 const WelcomeBanner: React.FC<{ name?: string; count?: number }> = ({ name = "Student", count = 0 }) => (
-  <div className="relative mb-10 rounded-3xl overflow-hidden bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-700 p-8 shadow-2xl">
+  <div className="relative mb-10 rounded-3xl overflow-hidden bg-blue-950 p-8 shadow-2xl">
     <div className="absolute -top-10 -right-10 w-56 h-56 rounded-full bg-white/5 pointer-events-none" />
     <div className="absolute -bottom-8 -right-4 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
  
@@ -74,29 +74,36 @@ const WelcomeBanner: React.FC<{ name?: string; count?: number }> = ({ name = "St
 );
  
 const HomePage: React.FC = () => {
+  const isLoggedIn = !!localStorage.getItem("token");
   const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
   const [publishedCourses, setPublishedCourses] = useState<Course[]>([]);
   const [userName, setUserName] = useState<string>("User");
+  const [search, setSearch] = useState("");
  
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
-        // Fetch enrolled courses
-        const enrollmentsRes = await api.get('/enrollments');
-        const enrollmentsData = enrollmentsRes.data || [];
-        const mappedEnrolled = enrollmentsData.map((e: any) => {
-           const c = mapCourse(e.course);
-           c.progress = e.progress || 0;
-           return c;
-        });
-        setEnrolledCourses(mappedEnrolled);
- 
-        // Fetch user data (optional, but good for Welcome banner)
-        if (enrollmentsData.length > 0 && enrollmentsData[0].user) {
-            setUserName(enrollmentsData[0].user.name || enrollmentsData[0].user.email);
+        if (isLoggedIn) {
+          // Fetch enrolled courses
+          const enrollmentsRes = await api.get('/enrollments');
+          const enrollmentsData = enrollmentsRes.data || [];
+          const mappedEnrolled = enrollmentsData.map((e: any) => {
+            const c = mapCourse(e.course);
+            c.progress = e.progress || 0;
+            return c;
+          });
+          setEnrolledCourses(mappedEnrolled);
+          if (enrollmentsData.length > 0 && enrollmentsData[0].user) {
+            setUserName(
+              enrollmentsData[0].user.firstname || 
+              enrollmentsData[0].user.username || 
+              enrollmentsData[0].user.email || 
+              "User"
+            );
+          }
         }
  
-        // Fetch all published courses to populate other sections
+        // Always fetch published courses
         const coursesRes = await api.get('/courses/published');
         const mappedCourses = (coursesRes.data || []).map(mapCourse);
         setPublishedCourses(mappedCourses);
@@ -111,7 +118,57 @@ const HomePage: React.FC = () => {
   const displayRecommended = publishedCourses.length > 0 ? publishedCourses : hardcodedRecommended;
   const displayExplore = publishedCourses.length > 0 ? publishedCourses : hardcodedExplore;
   const displayTrending = publishedCourses.length > 0 ? publishedCourses : hardcodedTrending;
- 
+
+  // ── Guest view ─────────────────────────────────────────────────────
+  if (!isLoggedIn) {
+    const filtered = search.trim()
+      ? displayRecommended.filter((c) =>
+          c.title.toLowerCase().includes(search.toLowerCase()) ||
+          c.instructor.toLowerCase().includes(search.toLowerCase()) ||
+          c.category.toLowerCase().includes(search.toLowerCase())
+        )
+      : displayRecommended;
+
+    return (
+      <div className="min-h-screen bg-slate-50 font-sans">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
+          <div className="mb-8">
+            <h1 className="text-4xl font-black text-blue-900 mb-1">Welcome to LearnHub!</h1>
+            <h1 className="text-3xl font-black text-slate-800 my-4">Browse Courses</h1>
+            <p className="text-slate-500 text-sm mb-5">
+              <span className="font-semibold text-slate-700">New here?</span>{" "}
+              <a href="/userLogin" className="text-violet-600 hover:underline font-semibold">Sign in</a>{" "}
+              to enroll and track your progress.
+            </p>
+            <div className="relative max-w-md flex-shrink-0 w-full">
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-800 pointer-events-none" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search courses, topics, instructors..."
+                className="w-full pl-10 pr-10 py-3 rounded-2xl border border-slate-800 bg-white text-slate-800 text-sm placeholder-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-200 transition-all"
+              />
+              {search && (
+                <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                  <X size={15} />
+                </button>
+              )}
+            </div>
+          </div>
+          <CourseSection
+            title="All Courses"
+            subtitle="Browse our full course library"
+            courses={filtered.slice(0, 8)}
+            accentColor="violet"
+            viewAllPath="/courses/recommended"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // ── Logged-in view ─────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-8">

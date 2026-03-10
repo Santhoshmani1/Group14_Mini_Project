@@ -37,12 +37,13 @@ export class CourseService {
       if (sections && sections.length > 0) {
         const sectionEntities = sections.map((section, index) =>
           this.sectionRepository.create({
-            ...section,
-            courseId: savedCourse.id,
+            title: section.title,
+            description: section.description,
+            videoUrl: section.videoUrl,
             orderIndex: section.orderIndex ?? index,
+            course: savedCourse,
           }),
         );
-
         await this.sectionRepository.save(sectionEntities);
       }
 

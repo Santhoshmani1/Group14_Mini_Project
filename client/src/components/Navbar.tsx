@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { Menu, GraduationCap } from "lucide-react";
 import SearchBar from "./SearchBar";
@@ -24,13 +24,16 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
 
         {/* ── LEFT: Hamburger + Logo ── */}
         <div className="flex items-center gap-3 flex-shrink-0">
-          <button
-            onClick={onMenuClick}
-            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors"
-            aria-label="Open menu"
-          >
-            <Menu size={22} />
-          </button>
+          {/* Hamburger — only visible when logged in */}
+          {token && (
+            <button
+              onClick={onMenuClick}
+              className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors"
+              aria-label="Open menu"
+            >
+              <Menu size={22} />
+            </button>
+          )}
 
           <button
             onClick={() => navigate(token ? "/" : "/userLogin")}
@@ -73,14 +76,14 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
             <>
               <button
                 onClick={() => navigate("/userLogin")}
-                className="hidden sm:block px-4 py-2 text-sm font-semibold text-slate-700 hover:text-violet-700 hover:bg-violet-50 rounded-xl transition-all duration-200"
+                className="hidden sm:block px-4 py-2 text-sm font-bold border border-blue-500 text-slate-700 hover:text-blue-800 hover:bg-blue-50 rounded-xl transition-all duration-200 hover:-translate-y-0.5"
               >
                 Sign In
               </button>
 
               <button
                 onClick={() => navigate("/userRegister")}
-                className="px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 rounded-xl shadow-md shadow-violet-200 hover:shadow-violet-300 transition-all duration-200 hover:-translate-y-0.5"
+                className="px-4 py-2 text-sm font-bold text-white bg-blue-800 rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5"
               >
                 Sign Up
               </button>

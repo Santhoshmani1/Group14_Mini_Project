@@ -10,7 +10,7 @@ interface CourseDetails {
   language: string;
   status: 'draft' | 'published' | 'archived';
   thumbnailUrl?: string;
-  sections?: { id: number }[];
+  sections?: { id: number; title: string }[];
 }
 
 interface QuizDetails {
@@ -116,13 +116,13 @@ const InstructorPage = () => {
       <div className="flex gap-4 mb-8">
         <button
           onClick={() => navigate('/instructor/createCourse/')}
-          className="bg-blue-800 text-white px-5 py-2 rounded-md shadow hover:bg-gray-800 transition"
+          className="bg-blue-950 text-white px-5 py-2 rounded-md shadow hover:bg-gray-800 transition"
         >
            Create Course +
         </button>
         <button
           onClick={() => navigate('/instructor/createQuiz/')}
-          className="bg-blue-800 text-white px-5 py-2 rounded-md shadow hover:bg-gray-800 transition"
+          className="bg-blue-950 text-white px-5 py-2 rounded-md shadow hover:bg-gray-800 transition"
         >
           Create Quiz +
         </button>
@@ -147,14 +147,14 @@ const InstructorPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {courses.map((course) => (
-          <div key={course.id} className="border rounded-lg shadow-md p-5 flex flex-col justify-between bg-white">
+          <div key={course.id} className=" rounded-lg shadow-md p-5 flex flex-col justify-between bg-slate-200 text-black transition">
             {course.thumbnailUrl && (
               <img src={course.thumbnailUrl} alt={course.title}
                 className="w-full h-36 object-cover rounded mb-3" />
             )}
             <div className="flex-1">
               <h3 className="text-xl font-bold mb-1">{course.title}</h3>
-              <p className="text-gray-600 text-sm mb-3 line-clamp-3">{course.description}</p>
+              <p className="text-blue-950 text-sm mb-3 line-clamp-3">{course.description}</p>
               <p className="text-sm text-gray-500">Duration: {course.duration}</p>
               <p className="text-sm text-gray-500">Language: {course.language}</p>
               <p className={`text-sm font-medium mt-1 capitalize ${statusColor(course.status)}`}>
@@ -164,17 +164,17 @@ const InstructorPage = () => {
                 Sections: {course.sections?.length ?? 0}
               </p>
             </div>
-            <div className="flex gap-3 mt-4">
+            <div className="flex gap-7 mt-4">
               <button onClick={() => navigate(`/courses/${course.id}`)}
-                className="flex-1 border border-gray-400 text-gray-600 px-3 py-1.5 rounded hover:bg-gray-100 transition text-sm">
+                className="flex-1 text-white bg-blue-950 border border-gray-400 text-gray-600 px-3 py-1.5 rounded transition text-sm">
                 View
               </button>
               <button onClick={() => navigate(`/instructor/editCourse/${course.id}`)}
-                className="flex-1 border border-black text-black px-3 py-1.5 rounded hover:bg-black hover:text-white transition text-sm">
+                className="flex-1 border border-white bg-white text-blue-950 px-3 py-1.5 rounded hover:bg-black hover:text-white transition text-sm">
                 Edit
               </button>
               <button onClick={() => handleDeleteCourse(course.id)}
-                className="flex-1 border border-red-500 text-red-500 px-3 py-1.5 rounded hover:bg-red-500 hover:text-white transition text-sm">
+                className="flex-1  border border-red-500 text-red-500 px-3 py-1.5 rounded hover:bg-red-500 hover:text-white transition text-sm">
                 Delete
               </button>
             </div>
@@ -195,23 +195,29 @@ const InstructorPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {quizzes.map((quiz) => (
-          <div key={quiz.id} className="border rounded-lg shadow-md p-5 flex flex-col justify-between bg-white">
+          <div key={quiz.id} className=" rounded-lg shadow-md p-5 flex flex-col justify-between bg-slate-200 text-black">
             <div className="flex-1">
               <h3 className="text-xl font-bold mb-1">{quiz.title}</h3>
-              <p className="text-gray-600 text-sm mb-3 line-clamp-3">{quiz.description}</p>
+              <p className="text-blue-950 text-sm mb-3 line-clamp-3">{quiz.description}</p>
               <p className="text-sm text-gray-500">
                 Duration: {Math.floor(quiz.duration / 60)} min{quiz.duration % 60 > 0 ? ` ${quiz.duration % 60}s` : ''}
               </p>
               <p className="text-sm text-gray-500">Passing Score: {quiz.passingScore}%</p>
-              <p className="text-sm text-gray-400 mt-1">Section ID: {quiz.sectionId}</p>
+              <p className="text-sm text-gray-400 mt-1">
+                Section: {
+                  courses
+                    .flatMap((c) => c.sections ?? [])
+                    .find((s) => s.id === quiz.sectionId)?.title ?? `ID ${quiz.sectionId}`
+                }
+              </p>
             </div>
-            <div className="flex gap-3 mt-4">
+            <div className="flex gap-9 mt-4">
               <button onClick={() => navigate(`/instructor/editQuiz/${quiz.id}`)}
-                className="flex-1 border border-black text-black px-3 py-1.5 rounded hover:bg-black hover:text-white transition text-sm">
+                className="flex-1 border border-white bg-white text-blue-950 px-2 py-1 rounded hover:bg-black hover:text-white transition text-sm">
                 Edit
               </button>
               <button onClick={() => handleDeleteQuiz(quiz.id)}
-                className="flex-1 border border-red-500 text-red-500 px-3 py-1.5 rounded hover:bg-red-500 hover:text-white transition text-sm">
+                className="flex-1 border border-red-500 text-red-500 px-2 py-1 rounded hover:bg-red-500 hover:text-white transition text-sm">
                 Delete
               </button>
             </div>

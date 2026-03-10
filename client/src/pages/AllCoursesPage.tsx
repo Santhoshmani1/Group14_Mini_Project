@@ -41,12 +41,11 @@ interface SectionConfig {
 }
  
 // ── Types ─────────────────────────────────────────────────────────────────────
-type SortOption = "popular" | "rating" | "newest" | "price-low" | "price-high" | "duration";
+type SortOption = "popular" | "rating" | "newest" | "duration";
  
 interface Filters {
   levels: CourseLevel[];
   categories: string[];
-  priceRange: "all" | "free" | "paid";
   minRating: number;
 }
  
@@ -59,11 +58,10 @@ const mapCourse = (backendCourse: any): Course => {
   return {
     id: String(backendCourse.id),
     title: backendCourse.title,
-    instructor: backendCourse.instructor?.name || "Unknown Instructor",
+    instructor: backendCourse.instructor?.username || "Unknown Instructor",
     instructor_bio: backendCourse.instructor?.bio,
     instructor_avatar: backendCourse.instructor?.avatar,
     thumbnail_url: backendCourse.thumbnailUrl || "https://picsum.photos/seed/default/800/450",
-    price: parseFloat(backendCourse.price),
     average_rating: 4.5, // Mocked for now
     total_enrollments: backendCourse.enrollments?.length || 0,
     level: backendCourse.level || "BEGINNER",
@@ -86,8 +84,6 @@ const SortSelect: React.FC<{ value: SortOption; onChange: (v: SortOption) => voi
     { value: "popular", label: "Most Popular" },
     { value: "rating", label: "Highest Rated" },
     { value: "newest", label: "Newest First" },
-    { value: "price-low", label: "Price: Low to High" },
-    { value: "price-high", label: "Price: High to Low" },
     { value: "duration", label: "Shortest First" },
   ];
  
@@ -126,7 +122,6 @@ const AllCoursesPage: React.FC = () => {
   const [filters, setFilters] = useState<Filters>({
     levels: [],
     categories: [],
-    priceRange: "all",
     minRating: 0,
   });
   const [showFilters, setShowFilters] = useState<boolean>(false);
@@ -175,7 +170,7 @@ const AllCoursesPage: React.FC = () => {
       accentText: "text-violet-600",
       accentBorder: "border-violet-200",
       icon: <Sparkles size={20} />,
-      gradient: "from-violet-600 via-indigo-600 to-blue-700",
+      gradient: "bg-blue-950",
     },
     enrolled: {
       title: "Continue Learning",
@@ -189,7 +184,7 @@ const AllCoursesPage: React.FC = () => {
       accentText: "text-indigo-600",
       accentBorder: "border-indigo-200",
       icon: <BookOpen size={20} />,
-      gradient: "from-indigo-600 via-blue-600 to-cyan-600",
+      gradient: "bg-blue-950",
     },
     explore: {
       title: "Explore New Topics",
@@ -201,7 +196,7 @@ const AllCoursesPage: React.FC = () => {
       accentText: "text-emerald-600",
       accentBorder: "border-emerald-200",
       icon: <Compass size={20} />,
-      gradient: "from-emerald-600 via-teal-600 to-cyan-600",
+      gradient: "bg-blue-950",
     },
     trending: {
       title: "Trending Right Now",
@@ -213,7 +208,7 @@ const AllCoursesPage: React.FC = () => {
       accentText: "text-rose-600",
       accentBorder: "border-rose-200",
       icon: <TrendingUp size={20} />,
-      gradient: "from-rose-600 via-pink-600 to-fuchsia-600",
+      gradient: "bg-blue-950",
     },
   }), [publishedCourses, enrolledCourses]);
  
@@ -248,10 +243,7 @@ const AllCoursesPage: React.FC = () => {
       result = result.filter((c) => filters.categories.includes(c.category));
     }
  
-    if (filters.priceRange === "free") result = result.filter((c) => c.price === 0);
-    if (filters.priceRange === "paid") result = result.filter((c) => c.price > 0);
- 
-    if (filters.minRating > 0) {
+    if (filters.minRating> 0) {
       result = result.filter((c) => c.average_rating >= filters.minRating);
     }
  
@@ -264,8 +256,6 @@ const AllCoursesPage: React.FC = () => {
     switch (sort) {
       case "popular": return arr.sort((a, b) => b.total_enrollments - a.total_enrollments);
       case "rating": return arr.sort((a, b) => b.average_rating - a.average_rating);
-      case "price-low": return arr.sort((a, b) => a.price - b.price);
-      case "price-high": return arr.sort((a, b) => b.price - a.price);
       case "duration": return arr.sort((a, b) => a.estimated_duration_minutes - b.estimated_duration_minutes);
       case "newest": return arr.reverse();
       default: return arr;
@@ -289,14 +279,13 @@ const AllCoursesPage: React.FC = () => {
   };
  
   const clearFilters = () => {
-    setFilters({ levels: [], categories: [], priceRange: "all", minRating: 0 });
+    setFilters({ levels: [], categories: [], minRating: 0 });
     setSearch("");
   };
  
   const activeFilterCount =
     filters.levels.length +
     filters.categories.length +
-    (filters.priceRange !== "all" ? 1 : 0) +
     (filters.minRating > 0 ? 1 : 0);
  
   const LEVELS: CourseLevel[] = ["BEGINNER", "INTERMEDIATE", "ADVANCED"];
@@ -346,16 +335,16 @@ const AllCoursesPage: React.FC = () => {
  
             {/* Right side - Search bar */}
             <div className="relative max-w-md flex-shrink-0 w-full">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-800" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={`Search in ${config.title}...`}
-                className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/95 backdrop-blur-sm text-slate-800 text-sm placeholder-slate-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
+                className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white backdrop-blur-sm text-slate-800 text-sm placeholder-slate-800 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
               />
               {search && (
-                <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-800 hover:text-slate-600">
                   <X size={15} />
                 </button>
               )}
@@ -409,7 +398,7 @@ const AllCoursesPage: React.FC = () => {
         {/* Filter Panel */}
         {showFilters && (
           <div className={`mb-6 p-5 rounded-2xl border ${config.accentBorder} ${config.accentBg} transition-all`}>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* Level */}
               <div>
                 <p className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">Level</p>
@@ -425,26 +414,6 @@ const AllCoursesPage: React.FC = () => {
                       }`}
                     >
                       {level}
-                    </button>
-                  ))}
-                </div>
-              </div>
- 
-              {/* Price */}
-              <div>
-                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">Price</p>
-                <div className="flex flex-wrap gap-2">
-                  {(["all", "free", "paid"] as const).map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => setFilters((f) => ({ ...f, priceRange: opt }))}
-                      className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all capitalize ${
-                        filters.priceRange === opt
-                          ? `${config.accentBg} ${config.accentText} ${config.accentBorder}`
-                          : "bg-white border-slate-200 text-slate-500 hover:border-slate-300"
-                      }`}
-                    >
-                      {opt === "all" ? "All Prices" : opt === "free" ? "Free" : "Paid"}
                     </button>
                   ))}
                 </div>

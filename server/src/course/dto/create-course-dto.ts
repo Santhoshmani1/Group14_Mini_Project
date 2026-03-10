@@ -24,6 +24,10 @@ class CreateSectionInCourseDto {
   @IsNumber()
   @Min(0)
   orderIndex?: number;
+
+  @IsOptional()
+  @IsUrl()
+  videoUrl?: string;
 }
 
 export class CreateCourseDto {

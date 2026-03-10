@@ -51,11 +51,7 @@ export default function CourseCard({ course, showProgress = false }: CourseCardP
             FEATURED
           </span>
         )}
-        {!showProgress && (
-          <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-2.5 py-1 font-bold text-slate-800 text-sm shadow">
-            {course.price === 0 ? "Free" : `₹${course.price}`}
-          </div>
-        )}
+
       </div>
 
       {/* Content */}

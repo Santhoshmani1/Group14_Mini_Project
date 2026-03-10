@@ -1,0 +1,21 @@
+name: LMS-Docker
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" # Map host port 3000 to container port 80 (Nginx)
+    restart: always
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000" # Map host port 3001 to container port 3000 (NestJS)
+    environment:
+      - PORT=3000 # Ensure NestJS listens on the correct port inside the container
+    restart: always

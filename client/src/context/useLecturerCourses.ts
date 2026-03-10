@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
-import type { Course } from "../api";
+// import type { Course } from "../api";
 
 export interface LecturerCoursesContextType {
-  courses: Course[];
-  addCourse: (course: Omit<Course, "id" | "createdAt" | "updatedAt" | "instructor" | "sections">) => void;
-  updateCourse: (id: number, updated: Partial<Course>) => void;
+  courses: any[];
+  addCourse: (course: any) => void;
+  updateCourse: (id: number, updated: any) => void;
   deleteCourse: (id: number) => void;
-  getCourseById: (id: number) => Course | undefined;
+  getCourseById: (id: number) => any | undefined;
 }
 
 export const LecturerCoursesContext = createContext<LecturerCoursesContextType | null>(null);

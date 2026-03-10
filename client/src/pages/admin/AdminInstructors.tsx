@@ -36,7 +36,7 @@ const AdminInstructors: React.FC = () => {
     try {
       const action = instructor.is_active ? 'block' : 'approve';
       await api.patch(`/admin/instructors/${instructor.id}/${action}`);
-      fetchInstructors();
+      await fetchInstructors();
     } catch (err) {
       console.error('Failed to update instructor status:', err);
     }

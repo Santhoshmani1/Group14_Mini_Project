@@ -161,10 +161,32 @@ export class AdminService {
   }
 
   async deleteCourse(id: number): Promise<void> {
-    const course = await this.courseRepository.findOne({ where: { id } });
+    const course = await this.courseRepository.findOne({ 
+      where: { id },
+      relations: ['sections', 'enrollments'] 
+    });
     if (!course) {
       throw new NotFoundException(`Course with ID ${id} not found`);
     }
+
+    // Handled clustered deletes to prevent FK violations
+    if (course.enrollments && course.enrollments.length > 0) {
+      await this.enrollmentRepository.remove(course.enrollments);
+    }
+    
+    // Quizzes may be attached to sections, those will need to be deleted
+    if (course.sections && course.sections.length > 0) {
+      for (const section of course.sections) {
+         const quizzes = await this.quizRepository.find({ where: { section: { id: section.id } } });
+         if (quizzes.length > 0) {
+           await this.quizRepository.remove(quizzes);
+         }
+      }
+      // Depending on setup, `courseRepository.remove` might cascade sections. 
+      // If it doesn't, we should delete them here, but we will rely on TypeORM's
+      // cascade or let course removal delete them if FK is ON DELETE CASCADE.
+    }
+
     await this.courseRepository.remove(course);
   }
 

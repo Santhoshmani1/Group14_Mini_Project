@@ -6,10 +6,10 @@ interface Course {
   id: number;
   title: string;
   status: string;
-  price: number;
   instructor: {
     firstname: string;
     lastname: string;
+    username: string;
     email: string;
   };
 }
@@ -114,7 +114,6 @@ const AdminCourses: React.FC = () => {
             <tr>
               <th className="px-6 py-4 font-medium">Title</th>
               <th className="px-6 py-4 font-medium">Instructor</th>
-              <th className="px-6 py-4 font-medium">Price</th>
               <th className="px-6 py-4 font-medium">Status</th>
               <th className="px-6 py-4 font-medium text-right">Actions</th>
             </tr>
@@ -128,8 +127,7 @@ const AdminCourses: React.FC = () => {
               filtered.map((course) => (
                 <tr key={course.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 font-medium text-gray-900">{course.title}</td>
-                  <td className="px-6 py-4 text-gray-500">{course.instructor?.firstname} {course.instructor?.lastname}</td>
-                  <td className="px-6 py-4 text-gray-500">${course.price}</td>
+                  <td className="px-6 py-4 text-gray-500">{course.instructor?.firstname || course.instructor?.username || 'Unknown Instructor'}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       course.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'

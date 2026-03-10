@@ -44,7 +44,7 @@ const AdminUsers: React.FC = () => {
       const action = user.is_active ? 'block' : 'unblock';
       await api.patch(`/admin/users/${user.id}/${action}`);
       // Refresh list
-      fetchUsers(searchTerm);
+      await fetchUsers(searchTerm);
     } catch (err) {
       console.error('Failed to update user status:', err);
     }
