@@ -43,3 +43,18 @@ jobs:
             ${{ secrets.AZ_ACR_LOGIN_SERVER }}/server:latest
             ${{ secrets.AZ_ACR_LOGIN_SERVER }}/server:${{ github.sha }}
             ${{ secrets.AZ_ACR_LOGIN_SERVER }}/server:${{ github.run_number }}
+
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          password: ${{ secrets.VM_PASSWORD }}
+          script: |
+            docker login ${{ secrets.AZ_ACR_LOGIN_SERVER }} \
+              --username ${{ secrets.AZ_ACR_CLIENT_ID }} \
+              --password ${{ secrets.AZ_ACR_CLIENT_SECRET }}  
+            cd /home/${{ secrets.VM_USERNAME }}/lms
+            docker compose pull
+            docker compose up -d
+            docker image prune -f
