@@ -46,7 +46,7 @@ const CreateCoursePage = () => {
   useEffect(() => {
     if (!isEditMode) return;
     axios
-      .get(`http://68.220.56.30:3000/courses/${courseId}`, {
+      .get(`/api/courses/${courseId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -128,7 +128,7 @@ const CreateCoursePage = () => {
       if (isEditMode) {
         // PATCH — UpdateCourseDto fields only (no sections)
         await axios.patch(
-          `http://68.220.56.30:3000/courses/${courseId}`,
+          `/api/courses/${courseId}`,
           {
             title: form.title,
             description: form.description,
@@ -153,7 +153,7 @@ const CreateCoursePage = () => {
             ...(s.videoUrl ? { videoUrl: s.videoUrl } : {}),
           })),
         };
-        await axios.post("http://68.220.56.30:3000/courses", payload, {
+        await axios.post("/api/courses", payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setSuccess("Course created successfully!");
