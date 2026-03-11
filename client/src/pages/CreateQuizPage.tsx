@@ -40,7 +40,7 @@ const CreateQuizPage: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios
-      .get("http://68.220.56.30:3000/courses/my-courses", {
+      .get("/api/courses/my-courses", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

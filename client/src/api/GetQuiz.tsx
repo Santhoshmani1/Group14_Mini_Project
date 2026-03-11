@@ -1,7 +1,8 @@
+
 export const getQuiz = async (quizId: number) => {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(`http://68.220.56.30:3000/quizzes/${quizId}`, {
+  const response = await fetch(`/api/quizzes/${quizId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
